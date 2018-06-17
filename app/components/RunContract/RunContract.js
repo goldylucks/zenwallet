@@ -77,11 +77,7 @@ class RunContract extends Component {
     contractMessage.address = clipboard.readText()
   }
 
-  onRunContractClicked = async () => {
-    const confirmedPassword = await confirmPasswordModal()
-    if (!confirmedPassword) {
-      return
-    }
+  onRunContractClicked = (confirmedPassword) => {
     const { contractMessage } = this.props
     contractMessage.sendContractMessage(confirmedPassword)
     this.AutoSuggestAssets.wrappedInstance.reset()
@@ -228,12 +224,13 @@ class RunContract extends Component {
             { this.renderErrorResponse() }
             <Flexbox flexGrow={2} />
             <Flexbox flexGrow={1} justifyContent="flex-end" flexDirection="row">
-              <button
+              <ProtectedButton
+                requireSync
                 disabled={this.isSubmitButtonDisabled()}
-                onClick={enforceSynced(this.onRunContractClicked)}
+                onClick={this.onRunContractClicked)}
               >
                 {inprogress ? 'Running' : 'Run'}
-              </button>
+              </ProtectedButton>
             </Flexbox>
           </Flexbox>
         </Flexbox>
